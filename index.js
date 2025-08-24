@@ -1,38 +1,45 @@
-// Menu hamburger
+// ✅ Menu hamburger
 function toggleMenu() {
   document.getElementById("menu").classList.toggle("show");
 }
 
-// Ouvrir scanner
-function ouvrirScanner() {
-  document.getElementById("scanner").style.display = "block";
+// ✅ Ouvrir le scanner
+function openScanner() {
+  document.getElementById("scannerModal").style.display = "flex";
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      document.getElementById("camera").srcObject = stream;
+    })
+    .catch(err => {
+      alert("Impossible d'accéder à la caméra : " + err);
+    });
 }
 
-// Convertir en PDF avec jsPDF
-async function convertirEnPDF() {
-  const { jsPDF } = window.jspdf;
-  let input = document.getElementById("fileInput");
-  if (input.files.length === 0) {
-    alert("Veuillez choisir une image !");
-    return;
+// ✅ Fermer le scanner
+function closeScanner() {
+  document.getElementById("scannerModal").style.display = "none";
+  let video = document.getElementById("camera");
+  let stream = video.srcObject;
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
   }
+  video.srcObject = null;
+}
 
-  let file = input.files[0];
-  let reader = new FileReader();
-  reader.onload = function(e) {
-    let imgData = e.target.result;
-    let pdf = new jsPDF("p", "mm", "a4");
-    pdf.addImage(imgData, "JPEG", 10, 10, 180, 250);
-    
-    // Générer le PDF
-    let pdfBlob = pdf.output("blob");
-    let url = URL.createObjectURL(pdfBlob);
+// ✅ Capturer une image
+function capture() {
+  let video = document.getElementById("camera");
+  let canvas = document.getElementById("snapshot");
+  let context = canvas.getContext("2d");
 
-    let link = document.getElementById("downloadLink");
-    link.href = url;
-    link.download = "document_scanné.pdf";
-    link.style.display = "inline-block";
-    link.textContent = "📥 Télécharger le PDF";
-  };
-  reader.readAsDataURL(file);
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  alert("📸 Image capturée ! (prochaine étape : transformer en PDF)");
+}
+
+// ✅ Générer un document automatiquement (démo IA)
+function generateDocument() {
+  alert("📄 Document généré automatiquement !");
 }

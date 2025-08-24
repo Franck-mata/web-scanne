@@ -30,12 +30,12 @@
     <p class="subtitle">Organisez efficacement vos documents</p>
 
     <div class="cards">
-      <div class="card" onclick="ouvrirScanner()">
+      <div class="card" onclick="openScanner()">
         <span class="icon">🔍</span>
         <p>Scanage de Documents</p>
       </div>
 
-      <div class="card">
+      <div class="card" onclick="generateDocument()">
         <span class="icon">📄</span>
         <p>Génération</p>
       </div>
@@ -50,19 +50,17 @@
         <p>Personnalisation</p>
       </div>
     </div>
-
-    <!-- Scanner caché -->
-    <div id="scanner" class="scanner">
-      <h2>Scanner un document</h2>
-      <input type="file" id="fileInput" accept="image/*" capture="environment">
-      <button onclick="convertirEnPDF()">Convertir en PDF</button>
-      <a id="downloadLink" style="display:none;">📥 Télécharger PDF</a>
-    </div>
   </main>
+
+  <!-- Scanner caché -->
+  <div id="scannerModal" class="modal">
+    <video id="camera" autoplay></video>
+    <button onclick="capture()">📸 Capturer</button>
+    <button onclick="closeScanner()">❌ Fermer</button>
+    <canvas id="snapshot"></canvas>
+  </div>
 
   <!-- Script -->
   <script src="index.js"></script>
-  <!-- Librairie pour PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
