@@ -3,67 +3,58 @@ function toggleMenu() {
   document.getElementById("menu").classList.toggle("show");
 }
 
-// Ouvrir le scanner avec caméra arrière
+// Scanner
 function openScanner() {
+  const video = document.getElementById("camera");
   document.getElementById("scannerModal").style.display = "flex";
+
   navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-    .then(stream => {
-      document.getElementById("camera").srcObject = stream;
-    })
-    .catch(err => {
-      alert("Impossible d'accéder à la caméra : " + err);
-    });
+    .then(stream => video.srcObject = stream)
+    .catch(err => alert("Impossible d'accéder à la caméra : " + err));
 }
 
-// Fermer le scanner
 function closeScanner() {
-  document.getElementById("scannerModal").style.display = "none";
-  let video = document.getElementById("camera");
-  let stream = video.srcObject;
+  const video = document.getElementById("camera");
+  const stream = video.srcObject;
   if (stream) stream.getTracks().forEach(track => track.stop());
   video.srcObject = null;
+  document.getElementById("scannerModal").style.display = "none";
 }
 
-// Capturer une image
-function capture() {
-  let video = document.getElementById("camera");
-  let canvas = document.getElementById("snapshot");
-  let context = canvas.getContext("2d");
+async function capture() {
+  const video = document.getElementById("camera");
+  const canvas = document.getElementById("snapshot");
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
   alert("📸 Image capturée !");
 }
 
-// OCR
-function runOCR() {
-  let canvas = document.getElementById("snapshot");
-  Tesseract.recognize(canvas, 'fra', { logger: m => console.log(m) })
-    .then(({ data: { text } }) => {
-      alert("Texte détecté : " + text);
-    });
-}
+// Télécharger PDF / DOCX
+async function captureAndSave(format = "pdf") {
+  const canvas = document.getElementById("snapshot");
+  const dataUrl = canvas.toDataURL("image/jpeg");
 
-// IA / OpenAI
-function generateDocument() {
-  const prompt = prompt("Tapez le contenu à générer avec l'IA :");
-  if (!prompt) return;
-
-  fetch("/generate", {
+  const res = await fetch("/save-document", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
-  })
-  .then(res => res.json())
-  .then(data => alert("Texte généré :\n" + data.text))
-  .catch(err => alert("Erreur IA : " + err));
+    body: JSON.stringify({ dataUrl, format })
+  });
+
+  const result = await res.json();
+  alert(result.message);
+}
+function downloadPDF() { captureAndSave("pdf"); }
+function downloadDOCX() { captureAndSave("docx"); }
+
+// OCR simple
+async function runOCR() {
+  const canvas = document.getElementById("snapshot");
+  const result = await Tesseract.recognize(canvas, "fra", { logger: m => console.log(m) });
+  alert("Texte détecté :\n" + result.data.text);
 }
 
-// Documents sauvegardés
-function showSavedDocuments() {
-  alert("📂 Liste des documents sauvegardés (fonctionnalité à implémenter)");
+// IA Demo
+function generateDocument() {
+  alert("📄 Document généré automatiquement !");
 }
-
-// Télécharger PDF / DOCX
-function downloadPDF() { alert("📄 Télécharger PDF (à implémenter)"); }
-function downloadDOCX() { alert("📄 Télécharger DOCX (Word) (à implémenter)"); }

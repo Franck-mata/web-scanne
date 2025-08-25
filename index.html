@@ -39,16 +39,16 @@
         <span class="icon">🤖</span>
         <p>Générer un document (IA)</p>
       </div>
-      <div class="card" onclick="showSavedDocuments()">
+      <div class="card">
         <span class="icon">📂</span>
         <p>Documents sauvegardés</p>
       </div>
     </div>
 
-    <!-- Boutons de téléchargement -->
+    <!-- Buttons téléchargement -->
     <div class="download-buttons">
-      <button class="btn-blue" onclick="downloadPDF()">Télécharger en PDF</button>
-      <button class="btn-blue" onclick="downloadDOCX()">Télécharger en DOCX</button>
+      <button onclick="downloadPDF()">📄 Télécharger PDF</button>
+      <button onclick="downloadDOCX()">📝 Télécharger DOCX</button>
     </div>
   </main>
 
@@ -56,11 +56,10 @@
   <div id="scannerModal" class="modal">
     <video id="camera" autoplay></video>
     <canvas id="snapshot"></canvas>
-    <button onclick="capture()">📸 Capturer</button>
+    <button onclick="capture()">📸 Scanner</button>
     <button onclick="closeScanner()">❌ Fermer</button>
   </div>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="index.js"></script>
 </body>
