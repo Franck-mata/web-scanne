@@ -40,7 +40,7 @@ nav a:hover {
   color: #007bff;
 }
 
-/* Bouton hamburger */
+/* Hamburger */
 .hamburger {
   display: none;
   font-size: 26px;
@@ -93,6 +93,29 @@ main h1 {
   font-weight: 500;
 }
 
+/* Boutons téléchargement */
+.download-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-blue {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-blue:hover {
+  background: #0056b3;
+}
+
 /* Scanner modal */
 .modal {
   display: none;
@@ -112,78 +135,22 @@ main h1 {
   margin: 10px 0;
 }
 
-/* ---------------------------- */
-/* ✅ RESPONSIVE DESIGN         */
-/* ---------------------------- */
-
-/* Tablette (≤ 900px) */
+/* Responsive */
 @media screen and (max-width: 900px) {
-  header {
-    padding: 15px 20px;
-  }
-
-  nav ul {
-    gap: 15px;
-  }
-
-  main h1 {
-    font-size: 28px;
-  }
-
-  .subtitle {
-    font-size: 16px;
-  }
+  header { padding: 15px 20px; }
+  nav ul { gap: 15px; }
+  main h1 { font-size: 28px; }
+  .subtitle { font-size: 16px; }
 }
 
-/* Mobile (≤ 600px) */
 @media screen and (max-width: 600px) {
-  .hamburger {
-    display: block;
-  }
-
-  nav {
-    display: none;
-    width: 100%;
-  }
-
-  nav ul {
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    background: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-
-  nav ul li {
-    text-align: left;
-    padding: 12px 20px;
-    border-bottom: 1px solid #eee;
-  }
-
-  nav ul li a {
-    display: block;
-    width: 100%;
-  }
-
-  nav.show {
-    display: block;
-  }
-
-  main h1 {
-    font-size: 24px;
-  }
-
-  .subtitle {
-    font-size: 14px;
-  }
-
-  .cards {
-    grid-template-columns: 1fr; /* Une seule colonne */
-    padding: 0 20px 40px;
-  }
-
-  .card {
-    padding: 20px 15px;
-  }
+  .hamburger { display: block; }
+  nav { display: none; width: 100%; }
+  nav ul { flex-direction: column; width: 100%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  nav ul li { text-align: left; padding: 12px 20px; border-bottom: 1px solid #eee; }
+  nav.show { display: block; }
+  main h1 { font-size: 24px; }
+  .subtitle { font-size: 14px; }
+  .cards { grid-template-columns: 1fr; padding: 0 20px 40px; }
+  .card { padding: 20px 15px; }
 }

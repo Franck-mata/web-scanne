@@ -3,64 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gérer mes documents</title>
+  <title>Scan & Génération Document</title>
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-
-  <!-- HEADER -->
+  <!-- Header -->
   <header>
-    <div class="logo">📄</div>
-
-    <!-- Bouton hamburger pour mobile -->
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
-
+    <div class="logo">📄 ScanDoc</div>
     <nav id="menu">
       <ul>
         <li><a href="#">Accueil</a></li>
-        <li><a href="#">Fonctionnement</a></li>
-        <li><a href="#">À Propos de Nous</a></li>
+        <li><a href="#">Scanner</a></li>
+        <li><a href="#">OCR</a></li>
+        <li><a href="#">IA</a></li>
       </ul>
     </nav>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
   </header>
 
-  <!-- SECTION PRINCIPALE -->
+  <!-- Main -->
   <main>
-    <h1>Gérer mes documents</h1>
-    <p class="subtitle">Organisez efficacement vos documents</p>
+    <h1>Scanner & Générer vos documents</h1>
+    <p class="subtitle">Capturez, lisez et générez vos fichiers avec l’IA</p>
 
     <div class="cards">
       <div class="card" onclick="openScanner()">
-        <span class="icon">🔍</span>
-        <p>Scanage de Documents</p>
+        <span class="icon">📷</span>
+        <p>Scanner un document</p>
       </div>
-
+      <div class="card" onclick="runOCR()">
+        <span class="icon">🔎</span>
+        <p>Lire le texte (OCR)</p>
+      </div>
       <div class="card" onclick="generateDocument()">
-        <span class="icon">📄</span>
-        <p>Génération</p>
+        <span class="icon">🤖</span>
+        <p>Générer un document (IA)</p>
       </div>
-
-      <div class="card">
+      <div class="card" onclick="showSavedDocuments()">
         <span class="icon">📂</span>
-        <p>Document sauvegarde</p>
+        <p>Documents sauvegardés</p>
       </div>
+    </div>
 
-      <div class="card">
-        <span class="icon">⚙️</span>
-        <p>Personnalisation</p>
-      </div>
+    <!-- Boutons de téléchargement -->
+    <div class="download-buttons">
+      <button class="btn-blue" onclick="downloadPDF()">Télécharger en PDF</button>
+      <button class="btn-blue" onclick="downloadDOCX()">Télécharger en DOCX</button>
     </div>
   </main>
 
-  <!-- Scanner caché -->
+  <!-- Scanner Modal -->
   <div id="scannerModal" class="modal">
     <video id="camera" autoplay></video>
+    <canvas id="snapshot"></canvas>
     <button onclick="capture()">📸 Capturer</button>
     <button onclick="closeScanner()">❌ Fermer</button>
-    <canvas id="snapshot"></canvas>
   </div>
 
-  <!-- Script -->
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="index.js"></script>
 </body>
 </html>
