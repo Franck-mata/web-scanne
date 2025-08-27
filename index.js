@@ -1,60 +1,89 @@
-// Menu hamburger
+// MENU HAMBURGER
 function toggleMenu() {
   document.getElementById("menu").classList.toggle("show");
 }
 
-// Scanner
+// SCANNER + OCR
 function openScanner() {
-  const video = document.getElementById("camera");
   document.getElementById("scannerModal").style.display = "flex";
 
+  // Appel caméra arrière
   navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-    .then(stream => video.srcObject = stream)
-    .catch(err => alert("Impossible d'accéder à la caméra : " + err));
+    .then(stream => {
+      document.getElementById("camera").srcObject = stream;
+    })
+    .catch(() => {
+      // Si pas de caméra, on propose le fichier local
+      document.getElementById("fileInput").click();
+    });
 }
 
 function closeScanner() {
-  const video = document.getElementById("camera");
-  const stream = video.srcObject;
+  document.getElementById("scannerModal").style.display = "none";
+  let video = document.getElementById("camera");
+  let stream = video.srcObject;
   if (stream) stream.getTracks().forEach(track => track.stop());
   video.srcObject = null;
-  document.getElementById("scannerModal").style.display = "none";
 }
 
-async function capture() {
+function capture() {
   const video = document.getElementById("camera");
   const canvas = document.getElementById("snapshot");
+  const ctx = canvas.getContext("2d");
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
-  alert("📸 Image capturée !");
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // OCR automatique
+  Tesseract.recognize(canvas.toDataURL(), "fra")
+    .then(result => {
+      savePDF(result.data.text);
+      alert("Document scanné et OCR appliqué !");
+    });
 }
 
-// Télécharger PDF / DOCX
-async function captureAndSave(format = "pdf") {
-  const canvas = document.getElementById("snapshot");
-  const dataUrl = canvas.toDataURL("image/jpeg");
+// IMPORT FICHIER LOCAL
+document.getElementById("fileInput").addEventListener("change", function() {
+  const file = this.files[0];
+  if (!file) return;
 
-  const res = await fetch("/save-document", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ dataUrl, format })
-  });
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.getElementById("snapshot");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      Tesseract.recognize(canvas.toDataURL(), "fra")
+        .then(result => {
+          savePDF(result.data.text);
+          alert("Document importé et OCR appliqué !");
+        });
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
 
-  const result = await res.json();
-  alert(result.message);
+// FONCTIONS DE SAUVEGARDE
+function savePDF(text) {
+  const blob = new Blob([text], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "document.pdf";
+  a.click();
+  URL.revokeObjectURL(url);
 }
-function downloadPDF() { captureAndSave("pdf"); }
-function downloadDOCX() { captureAndSave("docx"); }
 
-// OCR simple
-async function runOCR() {
-  const canvas = document.getElementById("snapshot");
-  const result = await Tesseract.recognize(canvas, "fra", { logger: m => console.log(m) });
-  alert("Texte détecté :\n" + result.data.text);
-}
-
-// IA Demo
+// GÉNÉRATION DOCUMENT IA
 function generateDocument() {
-  alert("📄 Document généré automatiquement !");
+  alert("📄 Fonction IA encore à implémenter selon votre serveur");
+}
+
+// AFFICHER DOCUMENTS SAUVEGARDÉS
+function showSavedDocuments() {
+  alert("📂 Cette fonction affichera les documents sauvegardés !");
 }

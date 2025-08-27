@@ -7,56 +7,58 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <!-- Header -->
+  <!-- HEADER -->
   <header>
     <div class="logo">📄 ScanDoc</div>
     <nav id="menu">
       <ul>
         <li><a href="#">Accueil</a></li>
-        <li><a href="#">Scanner</a></li>
-        <li><a href="#">OCR</a></li>
-        <li><a href="#">IA</a></li>
+        <li><a href="#">Scanner & OCR</a></li>
+        <li><a href="#">Génération IA</a></li>
+        <li><a href="#">Documents sauvegardés</a></li>
       </ul>
     </nav>
     <div class="hamburger" onclick="toggleMenu()">☰</div>
   </header>
 
-  <!-- Main -->
+  <!-- MAIN -->
   <main>
     <h1>Scanner & Générer vos documents</h1>
-    <p class="subtitle">Capturez, lisez et générez vos fichiers avec l’IA</p>
+    <p class="subtitle">Capturez, lisez et générez vos fichiers directement avec l’IA</p>
 
     <div class="cards">
+      <!-- Carte Scan + OCR -->
       <div class="card" onclick="openScanner()">
         <span class="icon">📷</span>
-        <p>Scanner un document</p>
+        <p>Scanner & Lire (OCR)</p>
       </div>
-      <div class="card" onclick="runOCR()">
-        <span class="icon">🔎</span>
-        <p>Lire le texte (OCR)</p>
-      </div>
+
+      <!-- Carte Génération IA -->
       <div class="card" onclick="generateDocument()">
         <span class="icon">🤖</span>
         <p>Générer un document (IA)</p>
       </div>
-      <div class="card">
+
+      <!-- Carte Documents sauvegardés -->
+      <div class="card" onclick="showSavedDocuments()">
         <span class="icon">📂</span>
         <p>Documents sauvegardés</p>
       </div>
-    </div>
 
-    <!-- Buttons téléchargement -->
-    <div class="download-buttons">
-      <button onclick="downloadPDF()">📄 Télécharger PDF</button>
-      <button onclick="downloadDOCX()">📝 Télécharger DOCX</button>
+      <!-- Carte Personnalisation -->
+      <div class="card">
+        <span class="icon">⚙️</span>
+        <p>Personnalisation</p>
+      </div>
     </div>
   </main>
 
-  <!-- Scanner Modal -->
+  <!-- MODAL SCANNER -->
   <div id="scannerModal" class="modal">
     <video id="camera" autoplay></video>
     <canvas id="snapshot"></canvas>
-    <button onclick="capture()">📸 Scanner</button>
+    <input type="file" id="fileInput" accept="image/*" style="display:none">
+    <button onclick="capture()">📸 Capturer</button>
     <button onclick="closeScanner()">❌ Fermer</button>
   </div>
 
