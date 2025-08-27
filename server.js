@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
-app.use(express.static("."));
+app.use(express.static(".")); // sert index.html, css, js
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -22,6 +22,8 @@ app.post("/generate", async (req, res) => {
     res.json({ text: response.choices[0].message.content });
   } catch (error) {
     console.error(error);
+    // Attention : si vous voyez 429 insufficient_quota,
+    // cela vient de votre compte/billing OpenAI.
     res.status(500).json({ error: error.message });
   }
 });

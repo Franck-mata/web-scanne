@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scan & Génération Document</title>
-  <link rel="stylesheet" href="index.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scan & Gestion de Documents</title>
+  <link rel="stylesheet" href="index.css" />
 </head>
 <body>
   <!-- HEADER -->
@@ -13,9 +13,9 @@
     <nav id="menu">
       <ul>
         <li><a href="#">Accueil</a></li>
-        <li><a href="#">Scanner & OCR</a></li>
-        <li><a href="#">Génération IA</a></li>
-        <li><a href="#">Documents sauvegardés</a></li>
+        <li><a href="#" onclick="openScanner()">Scanner & OCR</a></li>
+        <li><a href="#" onclick="generateDocument()">Génération IA</a></li>
+        <li><a href="#" onclick="showSavedDocuments()">Documents sauvegardés</a></li>
       </ul>
     </nav>
     <div class="hamburger" onclick="toggleMenu()">☰</div>
@@ -23,29 +23,22 @@
 
   <!-- MAIN -->
   <main>
-    <h1>Scanner & Générer vos documents</h1>
-    <p class="subtitle">Capturez, lisez et générez vos fichiers directement avec l’IA</p>
+    <h1>Scanner & gérer vos documents</h1>
+    <p class="subtitle">Scannez en plein écran, OCR automatique, PDF multi-pages</p>
 
     <div class="cards">
-      <!-- Carte Scan + OCR -->
       <div class="card" onclick="openScanner()">
         <span class="icon">📷</span>
         <p>Scanner & Lire (OCR)</p>
       </div>
-
-      <!-- Carte Génération IA -->
       <div class="card" onclick="generateDocument()">
         <span class="icon">🤖</span>
         <p>Générer un document (IA)</p>
       </div>
-
-      <!-- Carte Documents sauvegardés -->
       <div class="card" onclick="showSavedDocuments()">
         <span class="icon">📂</span>
         <p>Documents sauvegardés</p>
       </div>
-
-      <!-- Carte Personnalisation -->
       <div class="card">
         <span class="icon">⚙️</span>
         <p>Personnalisation</p>
@@ -53,16 +46,70 @@
     </div>
   </main>
 
-  <!-- MODAL SCANNER -->
-  <div id="scannerModal" class="modal">
-    <video id="camera" autoplay></video>
-    <canvas id="snapshot"></canvas>
-    <input type="file" id="fileInput" accept="image/*" style="display:none">
-    <button onclick="capture()">📸 Capturer</button>
-    <button onclick="closeScanner()">❌ Fermer</button>
+  <!-- MODAL SCAN (PLEIN ÉCRAN) -->
+  <div id="scannerModal" class="modal hidden">
+    <!-- Zone vidéo plein écran -->
+    <video id="camera" autoplay playsinline></video>
+
+    <!-- Barre de contrôle pour CAPTURE -->
+    <div class="scan-controls" id="scanControls">
+      <button class="btn primary" onclick="capture()">📸 Capturer</button>
+      <button class="btn ghost" onclick="closeScanner()">❌ Fermer</button>
+    </div>
+
+    <!-- Zone d’aperçu (affichée après capture) -->
+    <div id="previewPanel" class="preview hidden">
+      <div class="preview-top">
+        <div class="docname">
+          <label for="docName">Nom du document</label>
+          <input id="docName" type="text" placeholder="Ex: Contrat_2025" />
+          <span class="ext">.pdf</span>
+        </div>
+        <div class="preview-actions">
+          <button class="btn success" onclick="saveCurrentDocument()">💾 Enregistrer</button>
+          <button class="btn secondary" onclick="addAnotherPage()">➕ Ajouter image</button>
+          <button class="btn ghost" onclick="resetCurrent()">↩️ Recommencer</button>
+          <button class="btn ghost" onclick="closeScanner()">❌ Fermer</button>
+        </div>
+      </div>
+
+      <div class="preview-body">
+        <!-- Dernière page capturée -->
+        <canvas id="snapshot"></canvas>
+
+        <!-- Miniatures des pages -->
+        <div class="thumbs">
+          <h4>Pages</h4>
+          <div id="thumbsContainer" class="thumbs-list"></div>
+        </div>
+
+        <!-- Texte OCR -->
+        <div class="ocr">
+          <details open>
+            <summary>📝 Texte OCR (extrait automatiquement)</summary>
+            <textarea id="ocrText" rows="10" spellcheck="false" placeholder="Le texte reconnu s’affichera ici…"></textarea>
+          </details>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- MODAL DOCUMENTS SAUVEGARDÉS -->
+  <div id="savedDocsModal" class="modal hidden">
+    <div class="saved-box">
+      <div class="saved-head">
+        <h2>📂 Documents sauvegardés</h2>
+        <button class="btn ghost" onclick="closeSavedDocs()">❌ Fermer</button>
+      </div>
+      <ul id="savedDocsList" class="saved-list"></ul>
+    </div>
+  </div>
+
+  <!-- Librairies -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Script app -->
   <script src="index.js"></script>
 </body>
 </html>
